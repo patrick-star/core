@@ -5,53 +5,39 @@ from contextlib import suppress
 import logging
 
 import requests
-import voluptuous as vol
 
-from homeassistant.components.device_tracker import (
-    DOMAIN,
-    PLATFORM_SCHEMA as PARENT_PLATFORM_SCHEMA,
-    DeviceScanner,
-)
+from homeassistant.components.device_tracker import DeviceScanner
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_SSL, CONF_VERIFY_SSL
 from homeassistant.core import HomeAssistant
-import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_HOST = "internetbox.swisscom.ch"
-DEFAULT_SSL = True
-DEFAULT_VERIFY_SSL = True
 
-PLATFORM_SCHEMA = PARENT_PLATFORM_SCHEMA.extend(
-    {
-        vol.Optional(CONF_HOST, default=DEFAULT_HOST): cv.string,
-        vol.Optional(CONF_SSL, default=DEFAULT_SSL): bool,
-        vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): bool,
-    }
-)
-
-
-def get_scanner(
-    hass: HomeAssistant, config: ConfigType
-) -> SwisscomDeviceScanner | None:
-    """Return the Swisscom device scanner."""
-    scanner = SwisscomDeviceScanner(config[DOMAIN])
-
-    return scanner if scanner.success_init else None
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Prepare setup of Swisscom Internet Box device scanner."""
+    logging.debug("Swisscom")
+    # config = hass.data[DOMAIN][config_entry.entry_id]
+    # scanner = await hass.async_add_executor_job(SwisscomDeviceScanner, config)
+    # if scanner.success_init:
+    #     async_add_entities([scanner])
 
 
 class SwisscomDeviceScanner(DeviceScanner):
     """This class queries a router running Swisscom Internet-Box firmware."""
 
-    def __init__(self, config):
+    def __init__(self, config) -> None:
         """Initialize the scanner."""
         self.host = config[CONF_HOST]
         self.protocol = "https" if config[CONF_SSL] else "http"
         self.verify_ssl = config[CONF_VERIFY_SSL]
-        self.last_results = {}
-
-        # Test the router is accessible.
+        self.last_results: dict = {}
+        # Test if  the router is accessible.
         data = self.get_swisscom_data()
         self.success_init = data is not None
 
@@ -94,7 +80,7 @@ class SwisscomDeviceScanner(DeviceScanner):
         "parameters":{"expression":"lan and not self"}}"""
 
         devices = {}
-
+        request = None
         try:
             request = requests.post(
                 url, headers=headers, data=data, timeout=5, verify=self.verify_ssl
