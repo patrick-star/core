@@ -16,8 +16,8 @@ from homeassistant.const import (
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     CONF_SHOW_ON_MAP,
     PERCENTAGE,
-    TEMP_CELSIUS,
     UnitOfPressure,
+    UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
@@ -33,7 +33,7 @@ SENSORS: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key="temperature",
         name="Temperature",
-        native_unit_of_measurement=TEMP_CELSIUS,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
     ),
@@ -116,7 +116,9 @@ class SensorCommunitySensor(CoordinatorEntity, SensorEntity):
             ATTR_SENSOR_ID: sensor_id,
         }
         self._attr_device_info = DeviceInfo(
-            configuration_url=f"https://devices.sensor.community/sensors/{sensor_id}/settings",
+            configuration_url=(
+                f"https://devices.sensor.community/sensors/{sensor_id}/settings"
+            ),
             identifiers={(DOMAIN, str(sensor_id))},
             name=f"Sensor {sensor_id}",
             manufacturer="Sensor.Community",

@@ -3,10 +3,9 @@ from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
-    TEMP_CELSIUS,
-    TEMP_FAHRENHEIT,
-    TIME_HOURS,
     UnitOfPressure,
+    UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -49,10 +48,10 @@ class AtagSensor(AtagEntity, SensorEntity):
             self._attr_device_class = coordinator.data.report[self._id].sensorclass
         if coordinator.data.report[self._id].measure in (
             UnitOfPressure.BAR,
-            TEMP_CELSIUS,
-            TEMP_FAHRENHEIT,
+            UnitOfTemperature.CELSIUS,
+            UnitOfTemperature.FAHRENHEIT,
             PERCENTAGE,
-            TIME_HOURS,
+            UnitOfTime.HOURS,
         ):
             self._attr_native_unit_of_measurement = coordinator.data.report[
                 self._id

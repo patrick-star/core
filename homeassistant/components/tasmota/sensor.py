@@ -23,12 +23,6 @@ from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    SPEED_KILOMETERS_PER_HOUR,
-    SPEED_METERS_PER_SECOND,
-    SPEED_MILES_PER_HOUR,
-    TEMP_CELSIUS,
-    TEMP_FAHRENHEIT,
-    TEMP_KELVIN,
     UnitOfApparentPower,
     UnitOfElectricCurrent,
     UnitOfElectricPotential,
@@ -38,6 +32,8 @@ from homeassistant.const import (
     UnitOfMass,
     UnitOfPower,
     UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
@@ -225,12 +221,12 @@ SENSOR_UNIT_MAP = {
     hc.PRESSURE_HPA: UnitOfPressure.HPA,
     hc.SIGNAL_STRENGTH_DECIBELS: SIGNAL_STRENGTH_DECIBELS,
     hc.SIGNAL_STRENGTH_DECIBELS_MILLIWATT: SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
-    hc.SPEED_KILOMETERS_PER_HOUR: SPEED_KILOMETERS_PER_HOUR,
-    hc.SPEED_METERS_PER_SECOND: SPEED_METERS_PER_SECOND,
-    hc.SPEED_MILES_PER_HOUR: SPEED_MILES_PER_HOUR,
-    hc.TEMP_CELSIUS: TEMP_CELSIUS,
-    hc.TEMP_FAHRENHEIT: TEMP_FAHRENHEIT,
-    hc.TEMP_KELVIN: TEMP_KELVIN,
+    hc.SPEED_KILOMETERS_PER_HOUR: UnitOfSpeed.KILOMETERS_PER_HOUR,
+    hc.SPEED_METERS_PER_SECOND: UnitOfSpeed.METERS_PER_SECOND,
+    hc.SPEED_MILES_PER_HOUR: UnitOfSpeed.MILES_PER_HOUR,
+    hc.TEMP_CELSIUS: UnitOfTemperature.CELSIUS,
+    hc.TEMP_FAHRENHEIT: UnitOfTemperature.FAHRENHEIT,
+    hc.TEMP_KELVIN: UnitOfTemperature.KELVIN,
     hc.VOLT: UnitOfElectricPotential.VOLT,
 }
 
